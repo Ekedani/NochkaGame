@@ -7,40 +7,32 @@ namespace NochkaGame.game
     public class Player
     {
         public readonly List<PlayingCard> PlayerHand;
-        private bool _isSecond;
+        private readonly bool _isSecond;
 
         public Player(bool isSecond)
         {
-            this._isSecond = isSecond;
+            _isSecond = isSecond;
             PlayerHand = new List<PlayingCard>();
         }
 
         public Move AssumeMoves(Table startTable)
         {
             var possibleMoves = new List<Move>();
-            for (int i = 0; i < PlayerHand.Count; i++)
-            {
+            for (var i = 0; i < PlayerHand.Count; i++)
                 if (startTable.AvailableMoves[(int) PlayerHand[i].Suit, PlayerHand[i].Value - 6])
                 {
                     var place = new Tuple<int, int>((int) PlayerHand[i].Suit, PlayerHand[i].Value - 6);
                     possibleMoves.Add(new Move(place, _isSecond, i));
                 }
-            }
 
             if (possibleMoves.Count == 0)
-            {
-                for (int i = 0; i < startTable.Cards.GetLength(0); i++)
-                {
-                    for (int j = 0; j < startTable.Cards.GetLength(1); j++)
+                for (var i = 0; i < startTable.Cards.GetLength(0); i++)
+                for (var j = 0; j < startTable.Cards.GetLength(1); j++)
+                    if (startTable.AvailableMoves[i, j] && startTable.Cards[i, j] != null)
                     {
-                        if (startTable.AvailableMoves[i, j] && startTable.Cards[i, j] != null)
-                        {
-                            var place = new Tuple<int, int>(i, j);
-                            possibleMoves.Add(new Move(place, _isSecond));
-                        }
+                        var place = new Tuple<int, int>(i, j);
+                        possibleMoves.Add(new Move(place, _isSecond));
                     }
-                }
-            }
 
             var bestMove = possibleMoves[0];
             var minEvaluation = float.MaxValue;
@@ -53,6 +45,7 @@ namespace NochkaGame.game
                     minEvaluation = curEvaluation;
                 }
             }
+
             return bestMove;
         }
 
@@ -62,15 +55,11 @@ namespace NochkaGame.game
             var newTable = startTable.AssumeMove(move, newHand);
             var profitableCards = 0;
             foreach (var playingCard in newHand)
-            {
                 if (newTable.AvailableMoves[(int) playingCard.Suit, playingCard.Value - 6])
-                {
                     profitableCards++;
-                }
-            }
 
             if (profitableCards == 0) return 100 * newHand.Count;
-            var profitablePercent = (float)profitableCards / newHand.Count;
+            var profitablePercent = (float) profitableCards / newHand.Count;
             var evaluation = newHand.Count / profitablePercent;
             return evaluation;
         }
@@ -79,13 +68,11 @@ namespace NochkaGame.game
         {
             var result = false;
             foreach (var playingCard in PlayerHand)
-            {
                 if (playingCard.Suit == card.Suit && playingCard.Value == card.Value)
                 {
                     result = true;
                     break;
                 }
-            }
 
             return result;
         }
@@ -94,12 +81,8 @@ namespace NochkaGame.game
         {
             var result = false;
             foreach (var playingCard in PlayerHand)
-            {
                 if (gameTable.AvailableMoves[(int) playingCard.Suit, playingCard.Value - 6])
-                {
                     result = true;
-                }
-            }
 
             return result;
         }

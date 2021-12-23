@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NochkaGame.game;
 using NochkaGame.game.card;
@@ -31,43 +25,32 @@ namespace NochkaGame
                 column.Width = 100;
             }
 
-            foreach (DataGridViewRow row in tableView.Rows)
-            {
-                row.DividerHeight = 10;
-            }
+            foreach (DataGridViewRow row in tableView.Rows) row.DividerHeight = 10;
         }
-
-        private void RenderGameState()
-        {
-            RenderTable();
-            RenderAiHand();
-            RenderHumanHand();
-        }
-
+        
         private void RenderTable()
         {
-            for (int i = 0; i < 4; i++)
+            tableView.ClearSelection();
+            for (var i = 0; i < 4; i++)
+            for (var j = 0; j < 9; j++)
             {
-                for (int j = 0; j < 9; j++)
+                tableView[j, i].Value = "";
+                var card = _currentGameState.GameTable.Cards[i, j];
+                if (card == null)
                 {
-                    tableView[j, i].Value = "";
-                    var card = _currentGameState.GameTable.Cards[i, j];
-                    if (card == null)
+                    tableView[j, i].Style.BackColor = Color.Green;
+                }
+                else
+                {
+                    if (card.IsVisible)
                     {
-                        tableView[j, i].Style.BackColor = Color.Green;
+                        tableView[j, i].Style.BackColor = Color.White;
+                        tableView[j, i].Style.ForeColor = (int) card.Suit < 2 ? Color.Red : Color.Black;
+                        tableView[j, i].Value = card.ToString();
                     }
                     else
                     {
-                        if (card.IsVisible)
-                        {
-                            tableView[j, i].Style.BackColor = Color.White;
-                            tableView[j, i].Style.ForeColor = (int) card.Suit < 2 ? Color.Red : Color.Black;
-                            tableView[j, i].Value = card.ToString();
-                        }
-                        else
-                        {
-                            tableView[j, i].Style.BackColor = Color.DarkGray;
-                        }
+                        tableView[j, i].Style.BackColor = Color.DarkGray;
                     }
                 }
             }
@@ -75,9 +58,10 @@ namespace NochkaGame
 
         private void RenderHumanHand()
         {
+            playerHandView.ClearSelection();
             playerHandView.RowCount = 1;
             playerHandView.ColumnCount = _currentGameState.FirstPlayer.PlayerHand.Count;
-            for (int i = 0; i < playerHandView.ColumnCount; i++)
+            for (var i = 0; i < playerHandView.ColumnCount; i++)
             {
                 var card = _currentGameState.FirstPlayer.PlayerHand[i];
                 playerHandView.Columns[i].DividerWidth = 10;
@@ -90,9 +74,10 @@ namespace NochkaGame
 
         private void RenderAiHand()
         {
+            AIHandView.ClearSelection();
             AIHandView.RowCount = 1;
             AIHandView.ColumnCount = _currentGameState.SecondPlayer.PlayerHand.Count;
-            for (int i = 0; i < AIHandView.ColumnCount; i++)
+            for (var i = 0; i < AIHandView.ColumnCount; i++)
             {
                 AIHandView.Columns[i].DividerWidth = 10;
                 AIHandView.Columns[i].Width = 80;
@@ -129,6 +114,7 @@ namespace NochkaGame
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
+
                 MakeAiMove();
                 if (_currentGameState.IsTerminal())
                 {
@@ -142,7 +128,6 @@ namespace NochkaGame
                 MessageBox.Show(exception.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            
         }
 
         private void skipTurnButton_Click(object sender, EventArgs e)
@@ -165,9 +150,7 @@ namespace NochkaGame
             if (selectedCells.Count != 1) throw new Exception("Only one place must be selected!");
             var selectedCell = selectedCells[0];
             if (!_currentGameState.GameTable.AvailableMoves[selectedCell.RowIndex, selectedCell.ColumnIndex])
-            {
                 throw new Exception("You can't make this move!");
-            }
 
             Move move = null;
             if (_currentGameState.FirstPlayer.HasMoves(_currentGameState.GameTable))
@@ -177,12 +160,12 @@ namespace NochkaGame
                 var idx = _currentGameState.FirstPlayer.PlayerHand.FindIndex(playingCard =>
                     playingCard.Suit == card.Suit && playingCard.Value == card.Value);
                 move = new Move(new Tuple<int, int>(selectedCell.RowIndex, selectedCell.ColumnIndex), false, idx);
-                
             }
             else
             {
-                move = new Move(new Tuple<int, int>(selectedCell.RowIndex, selectedCell.ColumnIndex), false, -1);
+                move = new Move(new Tuple<int, int>(selectedCell.RowIndex, selectedCell.ColumnIndex), false);
             }
+
             _currentGameState.MakeMove(move);
             RenderTable();
             RenderHumanHand();

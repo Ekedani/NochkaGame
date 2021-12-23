@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-
 namespace NochkaGame.game
 {
     public class GameState
     {
-        public Player FirstPlayer { get; set; }
-        public Player SecondPlayer { get; set; }
-        public Table GameTable { get; set; }
-
         private bool _isFirstMove = true;
 
         public GameState()
@@ -19,34 +14,24 @@ namespace NochkaGame.game
             GameTable = new Table();
             var deck = new CardDeck();
             for (var i = 0; i < 4; i++)
-            {
-                for (var j = 1; j < 8; j++)
-                {
-                    GameTable.Cards[i, j] = deck.TakeCard();
-                }
-            }
-            
+            for (var j = 1; j < 8; j++)
+                GameTable.Cards[i, j] = deck.TakeCard();
+
             deck.MakeCardsVisible();
             for (var i = 0; i < 8; i++)
-            {
                 if (i % 2 == 0)
-                {
                     FirstPlayer.PlayerHand.Add(deck.TakeCard());
-                }
                 else
-                {
                     SecondPlayer.PlayerHand.Add(deck.TakeCard());
-                }
-            }
-            
+
             for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 9; j++)
-                {
-                    GameTable.AvailableMoves[i,j] = true;
-                }
-            }
+            for (var j = 0; j < 9; j++)
+                GameTable.AvailableMoves[i, j] = true;
         }
+
+        public Player FirstPlayer { get; set; }
+        public Player SecondPlayer { get; set; }
+        public Table GameTable { get; set; }
 
         public void MakeMove(Move move)
         {
@@ -55,6 +40,7 @@ namespace NochkaGame.game
                 GameTable.AvailableMoves = new bool[4, 9];
                 _isFirstMove = false;
             }
+
             var player = move.IsSecondPlayer ? SecondPlayer : FirstPlayer;
             Table.MakeAvailable(move, GameTable);
             if (move.CardNum != -1)
@@ -86,6 +72,7 @@ namespace NochkaGame.game
         {
             return FirstPlayer.PlayerHand.Count == 0 || SecondPlayer.PlayerHand.Count == 0;
         }
+
         public void Output()
         {
             Console.WriteLine("First player's hand:");
@@ -94,6 +81,7 @@ namespace NochkaGame.game
                 Console.Write(playingCard);
                 Console.Write(" ");
             }
+
             Console.Write("\n");
             Console.WriteLine("Second player's hand:");
             foreach (var playingCard in SecondPlayer.PlayerHand)
@@ -101,15 +89,15 @@ namespace NochkaGame.game
                 Console.Write(playingCard);
                 Console.Write(" ");
             }
+
             Console.Write("\n");
             Console.WriteLine("Table:");
             for (var i = 0; i < 4; i++)
             {
                 for (var j = 0; j < 9; j++)
-                {
                     if (GameTable.Cards[i, j] != null)
                     {
-                        Console.Write(GameTable.Cards[i,j]);
+                        Console.Write(GameTable.Cards[i, j]);
                         Console.Write(" ");
                     }
                     else
@@ -118,16 +106,13 @@ namespace NochkaGame.game
                         Console.Write(" ");
                     }
 
-                }
                 Console.Write("\n");
             }
+
             Console.WriteLine("Available moves:");
             for (var i = 0; i < 4; i++)
             {
-                for (var j = 0; j < 9; j++)
-                {
-                    Console.Write(GameTable.AvailableMoves[i, j] ? "[ ]": "[X]");
-                }
+                for (var j = 0; j < 9; j++) Console.Write(GameTable.AvailableMoves[i, j] ? "[ ]" : "[X]");
                 Console.Write("\n");
             }
         }
@@ -135,19 +120,13 @@ namespace NochkaGame.game
         public void OutputVisibilityMatrix()
         {
             Console.WriteLine("Visibility matrix:");
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 9; j++)
-                {
+                for (var j = 0; j < 9; j++)
                     if (GameTable.Cards[i, j] != null)
-                    {
-                        Console.Write(GameTable.Cards[i, j].IsVisible ? "[ ]": "[X]");
-                    }
+                        Console.Write(GameTable.Cards[i, j].IsVisible ? "[ ]" : "[X]");
                     else
-                    {
                         Console.Write("[N]");
-                    }
-                }
                 Console.Write("\n");
             }
         }

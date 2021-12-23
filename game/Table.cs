@@ -5,9 +5,6 @@ namespace NochkaGame.game
 {
     public class Table
     {
-        public PlayingCard[,] Cards { get; set; }
-        public bool[,] AvailableMoves { get; set; }
-
         public Table()
         {
             Cards = new PlayingCard[4, 9];
@@ -20,6 +17,9 @@ namespace NochkaGame.game
             AvailableMoves = previousTable.AvailableMoves.Clone() as bool[,];
         }
 
+        public PlayingCard[,] Cards { get; set; }
+        public bool[,] AvailableMoves { get; set; }
+
         public static void MakeAvailable(Move move, Table table)
         {
             var lowerI = move.Place.Item1 > 0 ? move.Place.Item1 - 1 : 0;
@@ -27,15 +27,9 @@ namespace NochkaGame.game
             var higherI = move.Place.Item1 + 1;
             var higherJ = move.Place.Item2 + 1;
             for (var i = lowerI; i <= higherI && i < table.Cards.GetLength(0); i++)
-            {
-                for (var j = lowerJ; j <= higherJ && j < table.Cards.GetLength(1); j++)
-                {
-                    if (table.Cards[i, j] == null || !table.Cards[i, j].IsVisible)
-                    {
-                        table.AvailableMoves[i, j] = true;
-                    }
-                }
-            }
+            for (var j = lowerJ; j <= higherJ && j < table.Cards.GetLength(1); j++)
+                if (table.Cards[i, j] == null || !table.Cards[i, j].IsVisible)
+                    table.AvailableMoves[i, j] = true;
         }
 
         public Table AssumeMove(Move move, List<PlayingCard> playerHand)
