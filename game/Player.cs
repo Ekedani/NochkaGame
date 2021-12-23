@@ -74,5 +74,34 @@ namespace NochkaGame.game
             var evaluation = newHand.Count / profitablePercent;
             return evaluation;
         }
+
+        public bool HasCard(PlayingCard card)
+        {
+            var result = false;
+            foreach (var playingCard in PlayerHand)
+            {
+                if (playingCard.Suit == card.Suit && playingCard.Value == card.Value)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public bool HasMoves(Table gameTable)
+        {
+            var result = false;
+            foreach (var playingCard in PlayerHand)
+            {
+                if (gameTable.AvailableMoves[(int) playingCard.Suit, playingCard.Value - 6])
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
     }
 }

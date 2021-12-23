@@ -54,9 +54,9 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.moveButton = new System.Windows.Forms.Button();
+            this.skipTurnButton = new System.Windows.Forms.Button();
+            this.newGameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.tableView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.AIHandView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.playerHandView)).BeginInit();
@@ -325,9 +325,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.moveButton);
+            this.groupBox1.Controls.Add(this.skipTurnButton);
+            this.groupBox1.Controls.Add(this.newGameButton);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.groupBox1.Location = new System.Drawing.Point(1066, 283);
             this.groupBox1.Name = "groupBox1";
@@ -336,35 +336,37 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Menu";
             // 
-            // button3
+            // moveButton
             // 
-            this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(6, 37);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(247, 38);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Make Move";
-            this.button3.UseVisualStyleBackColor = true;
+            this.moveButton.Enabled = false;
+            this.moveButton.Location = new System.Drawing.Point(6, 37);
+            this.moveButton.Name = "moveButton";
+            this.moveButton.Size = new System.Drawing.Size(247, 38);
+            this.moveButton.TabIndex = 2;
+            this.moveButton.Text = "Make Move";
+            this.moveButton.UseVisualStyleBackColor = true;
+            this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
             // 
-            // button2
+            // skipTurnButton
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(6, 81);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(247, 38);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Skip Turn";
-            this.button2.UseVisualStyleBackColor = true;
+            this.skipTurnButton.Enabled = false;
+            this.skipTurnButton.Location = new System.Drawing.Point(6, 81);
+            this.skipTurnButton.Name = "skipTurnButton";
+            this.skipTurnButton.Size = new System.Drawing.Size(247, 38);
+            this.skipTurnButton.TabIndex = 1;
+            this.skipTurnButton.Text = "Skip Turn";
+            this.skipTurnButton.UseVisualStyleBackColor = true;
+            this.skipTurnButton.Click += new System.EventHandler(this.skipTurnButton_Click);
             // 
-            // button1
+            // newGameButton
             // 
-            this.button1.Location = new System.Drawing.Point(6, 125);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(247, 38);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "New Game";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.newGameButton.Location = new System.Drawing.Point(6, 125);
+            this.newGameButton.Name = "newGameButton";
+            this.newGameButton.Size = new System.Drawing.Size(247, 38);
+            this.newGameButton.TabIndex = 0;
+            this.newGameButton.Text = "New Game";
+            this.newGameButton.UseVisualStyleBackColor = true;
+            this.newGameButton.Click += new System.EventHandler(this.NewGameButton_Click);
             // 
             // GameForm
             // 
@@ -394,9 +396,9 @@
         }
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button newGameButton;
+        private System.Windows.Forms.Button skipTurnButton;
+        private System.Windows.Forms.Button moveButton;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panel2;
