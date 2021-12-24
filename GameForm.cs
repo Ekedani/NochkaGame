@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using NochkaGame.algorithm;
 using NochkaGame.game;
 using NochkaGame.game.card;
 
@@ -138,8 +139,17 @@ namespace NochkaGame
 
         private void MakeAiMove()
         {
-            var move = _currentGameState.SecondPlayer.AssumeMoves(_currentGameState.GameTable);
-            _currentGameState.MakeMove(move);
+            if (!_currentGameState.SecondPlayer.KnowOpponentCards(_currentGameState.GameTable))
+            {
+                var move = _currentGameState.SecondPlayer.AssumeMoves(_currentGameState.GameTable);
+                _currentGameState.MakeMove(move);
+            }
+            else
+            {
+                var tree = new MiniMaxTree(_currentGameState, 2);
+                var move = tree.AiMakeMove();
+                _currentGameState.MakeMove(move);
+            }
             RenderTable();
             RenderAiHand();
         }
