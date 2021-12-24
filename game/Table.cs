@@ -60,5 +60,21 @@ namespace NochkaGame.game
 
             return newTable;
         }
+        
+        public Table Clone()
+        {
+            var newTable = new Table {AvailableMoves = (bool[,]) AvailableMoves.Clone()};
+            for (var i = 0; i < newTable.Cards.GetLength(0); i++)
+            {
+                for (var j = 0; j < newTable.Cards.GetLength(1); j++)
+                {
+                    if (Cards[i, j] != null)
+                    {
+                        newTable.Cards[i, j] = Cards[i, j].Clone();
+                    }
+                }
+            }
+            return newTable;
+        }
     }
 }

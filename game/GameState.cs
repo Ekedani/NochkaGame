@@ -73,62 +73,16 @@ namespace NochkaGame.game
             return FirstPlayer.PlayerHand.Count == 0 || SecondPlayer.PlayerHand.Count == 0;
         }
 
-        public void Output()
+        public GameState Clone()
         {
-            Console.WriteLine("First player's hand:");
-            foreach (var playingCard in FirstPlayer.PlayerHand)
+            var newState = new GameState
             {
-                Console.Write(playingCard);
-                Console.Write(" ");
-            }
-
-            Console.Write("\n");
-            Console.WriteLine("Second player's hand:");
-            foreach (var playingCard in SecondPlayer.PlayerHand)
-            {
-                Console.Write(playingCard);
-                Console.Write(" ");
-            }
-
-            Console.Write("\n");
-            Console.WriteLine("Table:");
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 9; j++)
-                    if (GameTable.Cards[i, j] != null)
-                    {
-                        Console.Write(GameTable.Cards[i, j]);
-                        Console.Write(" ");
-                    }
-                    else
-                    {
-                        Console.Write("[ ]");
-                        Console.Write(" ");
-                    }
-
-                Console.Write("\n");
-            }
-
-            Console.WriteLine("Available moves:");
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 9; j++) Console.Write(GameTable.AvailableMoves[i, j] ? "[ ]" : "[X]");
-                Console.Write("\n");
-            }
-        }
-
-        public void OutputVisibilityMatrix()
-        {
-            Console.WriteLine("Visibility matrix:");
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 9; j++)
-                    if (GameTable.Cards[i, j] != null)
-                        Console.Write(GameTable.Cards[i, j].IsVisible ? "[ ]" : "[X]");
-                    else
-                        Console.Write("[N]");
-                Console.Write("\n");
-            }
+                FirstPlayer = FirstPlayer.Clone(),
+                SecondPlayer = SecondPlayer.Clone(),
+                _isFirstMove = _isFirstMove,
+                GameTable = GameTable.Clone()
+            };
+            return newState;
         }
     }
 }

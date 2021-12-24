@@ -86,5 +86,30 @@ namespace NochkaGame.game
 
             return result;
         }
+
+        public bool KnowOpponentCards(Table gameTable)
+        {
+            var result = true;
+            for (var i = 0; i < gameTable.Cards.GetLength(0); i++)
+            {
+                for (var j = 0; j < gameTable.Cards.GetLength(1); j++)
+                {
+                    result &= gameTable.Cards[i, j] == null || gameTable.Cards[i, j].IsVisible;
+                    if (!result) break;
+                }
+            }
+
+            return result;
+        }
+        
+        public Player Clone()
+        {
+            var newPlayer = new Player(_isSecond);
+            foreach (var playingCard in PlayerHand)
+            {
+                newPlayer.PlayerHand.Add(playingCard.Clone());
+            }
+            return newPlayer;
+        }
     }
 }
